@@ -4,6 +4,14 @@ export const presetWind4Targets: string[] = [
   // Compatible with presetMiniTargets
   ...presetMiniTargets,
 
+  // colors
+  'text-red-500',
+  'text-[red]/50', // Not theme color
+  'text-[red]:50/display-p3',
+  'text-red/display-p3',
+  'text-red/$op-variable', // When the color components length = 2, the second variable is used as opacity
+  'text-red/$op-variable/$method-variable',
+
   // font family
   'font-sans',
   'font-[custom-family-name]',
@@ -125,6 +133,8 @@ export const presetWind4Targets: string[] = [
   'stops-[blue,pink]',
   'bg-linear',
   'bg-radial',
+  'bg-conic',
+  'bg-conic-120',
   'bg-repeating-conic',
 
   // behaviors
@@ -284,6 +294,8 @@ export const presetWind4Targets: string[] = [
   'scroll-p-inline-none',
 
   // shadow, spacing
+  'shadow-2xs',
+  'inset-shadow-none',
   'mix-blend-normal',
   'mix-blend-hard-light',
   'mix-blend-plus-lighter',
@@ -321,6 +333,7 @@ export const presetWind4Targets: string[] = [
   'object-center-top',
   'object-center-bottom',
   'object-[center_25%]',
+  'collapse',
 
   // tables
   'border-collapse',
@@ -381,7 +394,7 @@ export const presetWind4Targets: string[] = [
   'object-$fit',
 
   // text-shadow
-  'text-shadow-xl',
+  'text-shadow-lg',
   'text-shadow-sky-300',
   'text-shadow-color-sky-300',
   'text-shadow-op-50',
@@ -483,6 +496,14 @@ export const presetWind4Targets: string[] = [
   'scheme-light-dark',
   'scheme-dark',
   'scheme-light',
+
+  // grid
+  'col-11',
+  '-col-12',
+  'col-span-$variable',
+  'row-11',
+  '-row-12',
+  'row-span-$variable',
 ]
 
 export const presetWindNonTargets: string[] = [

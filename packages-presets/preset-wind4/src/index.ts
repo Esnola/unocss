@@ -8,7 +8,7 @@ import { rules } from './rules'
 import { shortcuts } from './shortcuts'
 import { shorthands } from './shorthands'
 import { theme } from './theme'
-import { PRESET_NAME, trackedTheme } from './utils'
+import { PRESET_NAME, trackedProperties, trackedTheme } from './utils'
 import { variants } from './variants'
 
 export { postprocessors, preflights, rules, shortcuts, shorthands, theme, variants }
@@ -45,8 +45,6 @@ export interface PreflightsTheme {
 
   /**
    * Process the theme keys.
-   *
-   * @default undefined
    */
   process?: Arrayable<(entry: CSSEntry, ctx: PreflightContext<Theme>) => void>
 }
@@ -163,9 +161,11 @@ export const presetWind4 = definePreset<PresetWind4Options, Theme>((options = {}
     options,
     configResolved() {
       trackedTheme.clear()
+      trackedProperties.clear()
     },
     meta: {
       themeDeps: trackedTheme,
+      propertyDeps: trackedProperties,
     },
   }
 })

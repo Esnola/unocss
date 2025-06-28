@@ -3,6 +3,7 @@ import type { Theme } from '../theme/types'
 import { toArray } from '@unocss/core'
 import { getThemeByKey } from './utilities'
 
+// region Theme
 /**
  * Used to track theme keys.
  *
@@ -29,10 +30,21 @@ export function detectThemeValue(value: string, theme: Theme) {
     if (variable) {
       const [key, ...path] = variable.split('-')
       const themeValue = getThemeByKey(theme, key as keyof Theme, path)
-      if (themeValue != null) {
+
+      if (typeof themeValue === 'string') {
         themeTracking(key, path)
         detectThemeValue(themeValue, theme)
       }
     }
   }
 }
+// endregion
+
+// region Properties
+export const trackedProperties = new Map<string, string>()
+export function propertyTracking(property: string, value: string) {
+  if (!trackedProperties.has(property)) {
+    trackedProperties.set(property, value)
+  }
+}
+// endregion

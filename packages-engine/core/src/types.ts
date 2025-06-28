@@ -231,8 +231,8 @@ export interface RuleMeta {
 export type CSSValue = CSSObject | CSSEntries
 export type CSSValues = CSSValue | CSSValue[]
 
-export type DynamicMatcher<Theme extends object = object> =
-  (
+export type DynamicMatcher<Theme extends object = object>
+  = (
     match: RegExpMatchArray,
     context: Readonly<RuleContext<Theme>>
   ) =>
@@ -378,7 +378,7 @@ export type Variant<Theme extends object = object> = VariantFunction<Theme> | Va
 
 export type Preprocessor = (matcher: string) => string | undefined
 export type Postprocessor = (util: UtilObject) => void
-export type ThemeExtender<T> = (theme: T) => T | void
+export type ThemeExtender<Theme extends object = object> = (theme: Theme, config: Readonly<ResolvedConfig<Theme>>) => Theme | void
 
 export interface ConfigBase<Theme extends object = object> {
   /**
@@ -514,7 +514,7 @@ export interface ConfigBase<Theme extends object = object> {
    *
    * First presets runs first and the user config
    */
-  configResolved?: (config: ResolvedConfig) => void
+  configResolved?: (config: ResolvedConfig<Theme>) => void
 
   /**
    * Expose internal details for debugging / inspecting
@@ -820,11 +820,6 @@ export interface ContentOptions {
      */
     exclude?: FilterPattern
   }
-
-  /**
-   * @deprecated Renamed to `inline`
-   */
-  plain?: (string | { code: string, id?: string })[]
 }
 
 /**
@@ -859,25 +854,6 @@ export interface PluginOptions {
    * The usage extracted from each source will be **merged** together.
    */
   content?: ContentOptions
-
-  /** ========== DEPRECATED OPTIONS ========== */
-
-  /**
-   * @deprecated Renamed to `content`
-   */
-  extraContent?: ContentOptions
-
-  /**
-   * Patterns that filter the files being extracted.
-   * @deprecated moved to `content.pipeline.include`
-   */
-  include?: FilterPattern
-
-  /**
-   * Patterns that filter the files NOT being extracted.
-   * @deprecated moved to `content.pipeline.exclude`
-   */
-  exclude?: FilterPattern
 }
 
 export interface UserConfig<Theme extends object = object> extends ConfigBase<Theme>, UserOnlyOptions<Theme>, GeneratorOptions, PluginOptions, CliOptions { }

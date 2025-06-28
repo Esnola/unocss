@@ -90,19 +90,19 @@ describe('wind3', () => {
       )
       await expect(result)
         .toMatchInlineSnapshot(`
-        "@media (min-width: 640px) {
-          @media (min-width: 1024px) {
-            @media (min-width: 768px) {
-              @media (min-width: 320px) {
-                body {
-                  width: 40em;
+          "@media (min-width: 640px) {
+            @media (min-width: 1024px) {
+              @media (min-width: 768px) {
+                @media (min-width: 320px) {
+                  body {
+                    width: 40em;
+                  }
                 }
               }
             }
           }
-        }
-        "
-      `)
+          "
+        `)
     })
 
     it('breakpoints', async () => {
@@ -1519,12 +1519,12 @@ describe('wind4', () => {
         .toMatchInlineSnapshot(`
           ".btn {
             color: color-mix(
-              in oklch,
+              in srgb,
               var(--colors-red-500) var(--un-text-opacity),
               transparent
             );
             border-color: color-mix(
-              in oklch,
+              in srgb,
               var(--colors-red-500) var(--un-border-opacity),
               transparent
             );
@@ -1533,6 +1533,20 @@ describe('wind4', () => {
             syntax: "<percentage>";
             inherits: false;
             initial-value: 100%;
+          }
+          @supports (color: color-mix(in lab, red, red)) {
+            .btn {
+              color: color-mix(
+                in oklab,
+                var(--colors-red-500) var(--un-text-opacity),
+                transparent
+              );
+              border-color: color-mix(
+                in oklab,
+                var(--colors-red-500) var(--un-border-opacity),
+                transparent
+              );
+            }
           }
           @property --un-border-opacity {
             syntax: "<percentage>";

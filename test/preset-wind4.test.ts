@@ -1,6 +1,8 @@
 import { createGenerator, escapeSelector } from '@unocss/core'
 import presetWind4 from '@unocss/preset-wind4'
 import { createRemToPxProcessor } from '@unocss/preset-wind4/utils'
+import parserCSS from 'prettier/parser-postcss'
+import prettier from 'prettier/standalone'
 import { describe, expect, it } from 'vitest'
 import { presetWind4Targets } from './assets/preset-wind4-targets'
 
@@ -44,6 +46,9 @@ describe('preset-wind4', () => {
         "color-bluegray-400/10",
         "color-bluegray/10",
         "text-red2",
+        "text-[color:--variable]",
+        "text-[color:var(--color)]",
+        "text-[color:var(--color-x)]:[trick]",
         "ring-red2",
         "ring-red2/5",
         "ring-width-px",
@@ -81,6 +86,10 @@ describe('preset-wind4', () => {
         "placeholder-color-red-1",
         "hover:not-first:checked:bg-true-gray/10",
         "hover:is-first:checked:bg-true-gray/10",
+        "group-aria-focus:p-4",
+        "parent-aria-hover:text-center",
+        "group-aria-hover:font-10",
+        "group-aria-hover/label:font-15",
         "@container-inline-size",
         "@container/label-inline-size",
         "@container-size",
@@ -104,6 +113,7 @@ describe('preset-wind4', () => {
         "uno-layer-_pre:contrast-less:bg-gray-3",
         "-space-x-4",
         "data-dropdown:ring-green",
+        "mask-tb",
       ]
     `)
   })
@@ -158,6 +168,7 @@ describe('preset-wind4', () => {
     const { css } = await uno.generate('c-foo')
     expect(css).toMatchInlineSnapshot(`
       "/* layer: properties */
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))){*, ::before, ::after, ::backdrop{--un-text-opacity:100%;}}
       @property --un-text-opacity{syntax:"<percentage>";inherits:false;initial-value:100%;}
       /* layer: theme */
       :root, :host {
@@ -167,7 +178,10 @@ describe('preset-wind4', () => {
       --colors-test: #fff;
       }
       /* layer: default */
-      .c-foo{color:color-mix(in oklch, var(--colors-foo) var(--un-text-opacity), transparent) /* var(--colors-bar) */;}"
+      .c-foo{color:color-mix(in srgb, var(--colors-foo) var(--un-text-opacity), transparent) /* var(--colors-bar) */;}
+      @supports (color: color-mix(in lab, red, red)){
+      .c-foo{color:color-mix(in oklab, var(--colors-foo) var(--un-text-opacity), transparent) /* var(--colors-bar) */;}
+      }"
     `)
   })
 
@@ -265,24 +279,39 @@ describe('preset-wind4', () => {
               },
             },
           },
+          'baz1': {
+            DEFAULT: '#000',
+            qux1: '#fff',
+          },
+          'qux': {
+            2: '#000',
+          },
+          'quxx_1': '#000',
+          'a2b': '#000',
         },
       },
     })
 
-    const template = `
-<div class="text-foo-bar">1</div>
-<div class="text-foo-100-bar">2</div>
-<div class="text-foo-baz-qux">3</div>
-<div class="text-foo-primary-1">4</div>
-<div class="text-foo-primary-2">5</div>
-<div class="text-foo-primary-3-kebab-value">6</div>
-<div class="text-foo-primary-veryCool-kebab-value-test">7</div>
-<div class="text-red">8</div>
-    `
+    const templates = [
+      'text-foo-bar',
+      'text-foo-100-bar',
+      'text-foo-baz-qux',
+      'text-foo-primary-1',
+      'text-foo-primary-2',
+      'text-foo-primary-3-kebab-value',
+      'text-foo-primary-veryCool-kebab-value-test',
+      'text-red',
+      'text-baz1',
+      'text-baz1-qux1',
+      'text-qux2',
+      'text-quxx_1',
+      'text-a2b',
+    ]
 
-    const { css } = await uno.generate(template)
+    const { css } = await uno.generate(templates)
     expect(css).toMatchInlineSnapshot(`
       "/* layer: properties */
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))){*, ::before, ::after, ::backdrop{--un-text-opacity:100%;}}
       @property --un-text-opacity{syntax:"<percentage>";inherits:false;initial-value:100%;}
       /* layer: theme */
       :root, :host {
@@ -294,16 +323,149 @@ describe('preset-wind4', () => {
       --colors-foo-primary-3-kebab-value: red;
       --colors-foo-primary-veryCool-kebab-value-test: red;
       --colors-red-DEFAULT: oklch(70.4% 0.191 22.216);
+      --colors-baz1-DEFAULT: #000;
+      --colors-baz1-qux1: #fff;
+      --colors-qux-2: #000;
+      --colors-quxx_1: #000;
+      --colors-a2b: #000;
       }
       /* layer: default */
-      .text-foo-100-bar{color:color-mix(in oklch, var(--colors-foo-100-bar) var(--un-text-opacity), transparent) /* #000 */;}
-      .text-foo-bar{color:color-mix(in oklch, var(--colors-foo-bar) var(--un-text-opacity), transparent) /* #fff */;}
-      .text-foo-baz-qux{color:color-mix(in oklch, var(--colors-foo-baz-qux) var(--un-text-opacity), transparent) /* #f00 */;}
-      .text-foo-primary-1{color:color-mix(in oklch, var(--colors-foo-primary-1-DEFAULT) var(--un-text-opacity), transparent) /* red */;}
-      .text-foo-primary-2{color:color-mix(in oklch, var(--colors-foo-primary-2) var(--un-text-opacity), transparent) /* red */;}
-      .text-foo-primary-3-kebab-value{color:color-mix(in oklch, var(--colors-foo-primary-3-kebab-value) var(--un-text-opacity), transparent) /* red */;}
-      .text-foo-primary-veryCool-kebab-value-test{color:color-mix(in oklch, var(--colors-foo-primary-veryCool-kebab-value-test) var(--un-text-opacity), transparent) /* red */;}
-      .text-red{color:color-mix(in oklch, var(--colors-red-DEFAULT) var(--un-text-opacity), transparent) /* oklch(70.4% 0.191 22.216) */;}"
+      .text-a2b{color:color-mix(in srgb, var(--colors-a2b) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-baz1{color:color-mix(in srgb, var(--colors-baz1-DEFAULT) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-baz1-qux1{color:color-mix(in srgb, var(--colors-baz1-qux1) var(--un-text-opacity), transparent) /* #fff */;}
+      .text-foo-100-bar{color:color-mix(in srgb, var(--colors-foo-100-bar) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-foo-bar{color:color-mix(in srgb, var(--colors-foo-bar) var(--un-text-opacity), transparent) /* #fff */;}
+      .text-foo-baz-qux{color:color-mix(in srgb, var(--colors-foo-baz-qux) var(--un-text-opacity), transparent) /* #f00 */;}
+      .text-foo-primary-1{color:color-mix(in srgb, var(--colors-foo-primary-1-DEFAULT) var(--un-text-opacity), transparent) /* red */;}
+      .text-foo-primary-2{color:color-mix(in srgb, var(--colors-foo-primary-2) var(--un-text-opacity), transparent) /* red */;}
+      .text-foo-primary-3-kebab-value{color:color-mix(in srgb, var(--colors-foo-primary-3-kebab-value) var(--un-text-opacity), transparent) /* red */;}
+      .text-foo-primary-veryCool-kebab-value-test{color:color-mix(in srgb, var(--colors-foo-primary-veryCool-kebab-value-test) var(--un-text-opacity), transparent) /* red */;}
+      .text-qux2{color:color-mix(in srgb, var(--colors-qux-2) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-quxx_1{color:color-mix(in srgb, var(--colors-quxx_1) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-red{color:color-mix(in srgb, var(--colors-red-DEFAULT) var(--un-text-opacity), transparent) /* oklch(70.4% 0.191 22.216) */;}
+      @supports (color: color-mix(in lab, red, red)){
+      .text-a2b{color:color-mix(in oklab, var(--colors-a2b) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-baz1{color:color-mix(in oklab, var(--colors-baz1-DEFAULT) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-baz1-qux1{color:color-mix(in oklab, var(--colors-baz1-qux1) var(--un-text-opacity), transparent) /* #fff */;}
+      .text-foo-100-bar{color:color-mix(in oklab, var(--colors-foo-100-bar) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-foo-bar{color:color-mix(in oklab, var(--colors-foo-bar) var(--un-text-opacity), transparent) /* #fff */;}
+      .text-foo-baz-qux{color:color-mix(in oklab, var(--colors-foo-baz-qux) var(--un-text-opacity), transparent) /* #f00 */;}
+      .text-foo-primary-1{color:color-mix(in oklab, var(--colors-foo-primary-1-DEFAULT) var(--un-text-opacity), transparent) /* red */;}
+      .text-foo-primary-2{color:color-mix(in oklab, var(--colors-foo-primary-2) var(--un-text-opacity), transparent) /* red */;}
+      .text-foo-primary-3-kebab-value{color:color-mix(in oklab, var(--colors-foo-primary-3-kebab-value) var(--un-text-opacity), transparent) /* red */;}
+      .text-foo-primary-veryCool-kebab-value-test{color:color-mix(in oklab, var(--colors-foo-primary-veryCool-kebab-value-test) var(--un-text-opacity), transparent) /* red */;}
+      .text-qux2{color:color-mix(in oklab, var(--colors-qux-2) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-quxx_1{color:color-mix(in oklab, var(--colors-quxx_1) var(--un-text-opacity), transparent) /* #000 */;}
+      .text-red{color:color-mix(in oklab, var(--colors-red-DEFAULT) var(--un-text-opacity), transparent) /* oklch(70.4% 0.191 22.216) */;}
+      }"
+    `)
+  })
+
+  it('theme safelist', async () => {
+    const uno = await createGenerator<object>({
+      envMode: 'dev',
+      theme: {
+        custom: {
+          foo: 'var(--custom-bar)',
+          bar: 'var(--custom-baz-DEFAULT, inherit)',
+          baz: {
+            DEFAULT: 'inherit',
+          },
+        },
+      },
+      presets: [
+        presetWind4({
+          preflights: {
+            reset: false,
+          },
+        }),
+      ],
+      safelist: [
+        'spacing',
+        'colors:red-100',
+        'breakpoint:sm',
+        ({ theme }) => {
+          if ('custom' in theme) {
+            return [
+              'custom:foo',
+            ]
+          }
+          return []
+        },
+      ],
+    })
+
+    const { getLayer } = await uno.generate('')
+    const css = getLayer('theme')
+    expect(css).toMatchInlineSnapshot(`
+      "/* layer: theme */
+      :root, :host {
+      --spacing: 0.25rem;
+      --colors-red-100: oklch(93.6% 0.032 17.717);
+      --breakpoint-sm: 40rem;
+      --custom-foo: var(--custom-bar);
+      --custom-bar: var(--custom-baz-DEFAULT, inherit);
+      --custom-baz-DEFAULT: inherit;
+      }"
+    `)
+  })
+
+  it('nested pseudo selectors', async () => {
+    const uno = await createGenerator({
+      presets: [
+        presetWind4({
+          preflights: { reset: false },
+        }),
+      ],
+    })
+
+    const { css } = await uno.generate([
+      'peer-data-[variant=inset]:peer-data-[state=collapsed]:b-1',
+      'peer-aria-checked:has-aria-[level=3]:b-2',
+      'has-aria-[hidden=false]:in-data-[state=collapsed]:b-3',
+      'md:has-aria-[hidden=false]:peer-data-[dialog=open]:group-data-[vv=w]/accordion:b-4',
+    ])
+
+    const prettified = prettier.format(css, {
+      parser: 'css',
+      plugins: [parserCSS],
+    })
+
+    expect(prettified).toMatchInlineSnapshot(`
+      "/* layer: default */
+      .has-aria-\\[hidden\\=false\\]\\:in-data-\\[state\\=collapsed\\]\\:b-3 {
+        :where(*[data-state="collapsed"]) & {
+          &:has(*[aria-hidden="false"]) {
+            border-width: 3px;
+          }
+        }
+      }
+      .peer-aria-checked\\:has-aria-\\[level\\=3\\]\\:b-2 {
+        &:has(*[aria-level="3"]) {
+          &:is(:where(.peer)[aria-checked="true"] ~ *) {
+            border-width: 2px;
+          }
+        }
+      }
+      .peer-data-\\[variant\\=inset\\]\\:peer-data-\\[state\\=collapsed\\]\\:b-1 {
+        &:is(:where(.peer)[data-state="collapsed"] ~ *) {
+          &:is(:where(.peer)[data-variant="inset"] ~ *) {
+            border-width: 1px;
+          }
+        }
+      }
+      .md\\:has-aria-\\[hidden\\=false\\]\\:peer-data-\\[dialog\\=open\\]\\:group-data-\\[vv\\=w\\]\\/accordion\\:b-4 {
+        &:is(:where(.group\\/accordion)[data-vv="w"] *) {
+          &:is(:where(.peer)[data-dialog="open"] ~ *) {
+            @media (min-width: 48rem) {
+              &:has(*[aria-hidden="false"]) {
+                border-width: 4px;
+              }
+            }
+          }
+        }
+      }
+      "
     `)
   })
 })

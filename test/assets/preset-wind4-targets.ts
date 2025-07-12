@@ -4,6 +4,14 @@ export const presetWind4Targets: string[] = [
   // Compatible with presetMiniTargets
   ...presetMiniTargets,
 
+  // colors
+  'text-red-500',
+  'text-[red]/50', // Not theme color
+  'text-[red]:50/display-p3',
+  'text-red/display-p3',
+  'text-red/$op-variable', // When the color components length = 2, the second variable is used as opacity
+  'text-red/$op-variable/$method-variable',
+
   // font family
   'font-sans',
   'font-[custom-family-name]',
@@ -66,6 +74,9 @@ export const presetWind4Targets: string[] = [
 
   // background
   'bg-auto',
+  'bg-cover',
+  'bg-contain',
+  'bg-size-[auto_100px]',
   'bg-blend-normal',
   'bg-blend-color-burn',
   'bg-blend-luminosity',
@@ -74,7 +85,6 @@ export const presetWind4Targets: string[] = [
   'bg-clip-border',
   'bg-clip-text',
   'bg-clip-unset',
-  'bg-cover',
   'bg-fixed',
   'bg-linear-to-t',
   'bg-linear-to-tl',
@@ -125,6 +135,8 @@ export const presetWind4Targets: string[] = [
   'stops-[blue,pink]',
   'bg-linear',
   'bg-radial',
+  'bg-conic',
+  'bg-conic-120',
   'bg-repeating-conic',
 
   // behaviors
@@ -284,6 +296,8 @@ export const presetWind4Targets: string[] = [
   'scroll-p-inline-none',
 
   // shadow, spacing
+  'shadow-2xs',
+  'inset-shadow-none',
   'mix-blend-normal',
   'mix-blend-hard-light',
   'mix-blend-plus-lighter',
@@ -321,6 +335,7 @@ export const presetWind4Targets: string[] = [
   'object-center-top',
   'object-center-bottom',
   'object-[center_25%]',
+  'collapse',
 
   // tables
   'border-collapse',
@@ -381,7 +396,7 @@ export const presetWind4Targets: string[] = [
   'object-$fit',
 
   // text-shadow
-  'text-shadow-xl',
+  'text-shadow-lg',
   'text-shadow-sky-300',
   'text-shadow-color-sky-300',
   'text-shadow-op-50',
@@ -427,6 +442,16 @@ export const presetWind4Targets: string[] = [
   '-scroll-mb-px',
   '-scroll-p-px',
   '-space-x-4',
+
+  '*:data-[inline]:p-2',
+  '*:data-[inline]:hover:p-2',
+  '**:p-2',
+  '**-p-2',
+  '**:data-[inline]:p-2',
+  '**:data-[inline]:hover:p-2',
+  '**:hover:data-[inline]:p-2',
+  '**:aria-[id=avatar]:p-2',
+  '**:aria-[id=avatar]:hover:p-2',
 
   // variants experimental
   '@hover-text-red',
@@ -483,6 +508,130 @@ export const presetWind4Targets: string[] = [
   'scheme-light-dark',
   'scheme-dark',
   'scheme-light',
+
+  // grid
+  'col-11',
+  '-col-12',
+  'col-span-$variable',
+  'row-11',
+  '-row-12',
+  'row-span-$variable',
+
+  // mask-clip
+  'mask-clip-border',
+  'mask-clip-padding',
+  'mask-clip-content',
+  'mask-clip-fill',
+  'mask-clip-stroke',
+  'mask-clip-view',
+  'mask-no-clip',
+
+  // mask-composite
+  'mask-add',
+  'mask-subtract',
+  'mask-intersect',
+  'mask-exclude',
+
+  // mask-image
+  'mask-[url(https://test.unocss.png)]',
+  'mask-[var(--my-mask)]',
+  'mask-none',
+  'mask-l-from-50%',
+  'mask-l-from-red-400',
+  'mask-b-to-90%',
+  'mask-x-from-70%',
+  'mask-y-to-90%',
+  'mask-linear-50',
+  '-mask-linear-50',
+  'mask-linear-from-1/3',
+  'mask-linear-from-4',
+  'mask-linear-from-60%',
+  'mask-linear-from-60px',
+  'mask-linear-from-#f90',
+  'mask-linear-from-red-400',
+  'mask-linear-to-80%',
+  'mask-linear-[70deg,transparent_10%,black,transparent_80%]',
+  'mask-linear-[var(--my-mask-linear)]',
+  'mask-radial-4',
+  'mask-radial-50%',
+  'mask-radial-[100%_100%]',
+  'mask-radial-from-75%',
+  'mask-radial-at-left',
+  'mask-radial-at-bottom-right',
+  'mask-radial-circle',
+  'mask-radial-ellipse',
+  'mask-radial-closest-side',
+  'mask-radial-closest-corner',
+  'mask-radial-farthest-side',
+  'mask-radial-farthest-corner',
+  'mask-conic-25',
+  '-mask-conic-25',
+  'mask-conic-from-55%',
+  'mask-conic-to-85%',
+
+  // mask-mode
+  'mask-alpha',
+  'mask-luminance',
+  'mask-match',
+
+  // mask-origin
+  'mask-origin-border',
+  'mask-origin-padding',
+  'mask-origin-content',
+  'mask-origin-fill',
+  'mask-origin-stroke',
+  'mask-origin-view',
+
+  // mask-position
+  'mask-top',
+  'mask-left',
+  'mask-center',
+  'mask-right',
+  'mask-bottom',
+  'mask-top-left',
+  'mask-top-right',
+  'mask-bottom-left',
+  'mask-bottom-right',
+  'mask-right-bottom',
+  'mask-tl',
+  'mask-tr',
+  'mask-bl',
+  'mask-br',
+  'mask-tb',
+  'mask-l',
+  'mask-t',
+  'mask-r',
+  'mask-b',
+  'mask-pos-[left_-10%_top_1rem]',
+  'mask-position-[var(--my-mask-position)]',
+
+  // mask-repeat
+  'mask-repeat',
+  'mask-no-repeat',
+  'mask-repeat-x',
+  'mask-repeat-y',
+  'mask-repeat-space',
+  'mask-repeat-round',
+
+  // mask-size
+  'mask-auto',
+  'mask-cover',
+  'mask-contain',
+  'mask-size-4',
+  'mask-size-[auto_1rem]',
+
+  // mask-type
+  'mask-type-alpha',
+  'mask-type-luminance',
+
+  // implicit group
+  'in-[div]:bg-red-400',
+  'in-[a>button:hover]:font-bold',
+  'in-data-[state=closed]:border-5',
+  'in-aria-[hidden=false]:font-21',
+
+  // inert
+  'inert:opacity-25',
 ]
 
 export const presetWindNonTargets: string[] = [

@@ -74,7 +74,6 @@ function mergeContentOptions(optionsArray: ContentOptions[]): ContentOptions {
   let pipelineDisabled = false
   const filesystem: ContentOptions['filesystem'][] = []
   const inline: ContentOptions['inline'][] = []
-  const plain: ContentOptions['plain'][] = []
 
   for (const options of optionsArray) {
     if (options.pipeline === false) {
@@ -96,9 +95,6 @@ function mergeContentOptions(optionsArray: ContentOptions[]): ContentOptions {
     if (options.inline) {
       inline.push(options.inline)
     }
-    if (options.plain) {
-      plain.push(options.plain)
-    }
   }
 
   const mergedContent: ContentOptions = {
@@ -114,9 +110,6 @@ function mergeContentOptions(optionsArray: ContentOptions[]): ContentOptions {
   }
   if (inline.length) {
     mergedContent.inline = uniq(inline.flat()) as ContentOptions['inline']
-  }
-  if (plain.length) {
-    mergedContent.plain = uniq(plain.flat()) as ContentOptions['plain']
   }
 
   return mergedContent
@@ -179,12 +172,6 @@ export async function resolveConfig<Theme extends object = object>(
     })
     .reverse() as ResolvedConfig<Theme>['rulesDynamic']
 
-  let theme: Theme = mergeThemes(sources.map(p => p.theme))
-
-  const extendThemes = getMerged('extendTheme')
-  for (const extendTheme of extendThemes)
-    theme = extendTheme(theme) || theme
-
   const autocomplete = {
     templates: uniq(sources.flatMap(p => toArray(p.autocomplete?.templates))),
     extractors: sources.flatMap(p => toArray(p.autocomplete?.extractors))
@@ -199,7 +186,7 @@ export async function resolveConfig<Theme extends object = object>(
   const contents = getMerged('content')
   const content = mergeContentOptions(contents)
 
-  const resolved: ResolvedConfig<any> = {
+  const resolved: ResolvedConfig<Theme> = {
     mergeSelectors: true,
     warn: true,
     sortLayers: layers => layers,
@@ -209,7 +196,7 @@ export async function resolveConfig<Theme extends object = object>(
     envMode: config.envMode || 'build',
     shortcutsLayer: config.shortcutsLayer || 'shortcuts',
     layers,
-    theme,
+    theme: mergeThemes(sources.map(p => p.theme)),
     rules,
     rulesSize,
     rulesDynamic,
@@ -229,6 +216,10 @@ export async function resolveConfig<Theme extends object = object>(
     content,
     transformers: uniqueBy(getMerged('transformers'), (a, b) => a.name === b.name),
   }
+
+  const extendThemes = getMerged('extendTheme')
+  for (const extendTheme of extendThemes)
+    resolved.theme = extendTheme(resolved.theme, resolved) || resolved.theme
 
   for (const p of sources)
     p?.configResolved?.(resolved)

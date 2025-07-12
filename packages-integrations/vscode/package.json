@@ -3,14 +3,14 @@
   "name": "@unocss/vscode",
   "displayName": "UnoCSS",
   "type": "module",
-  "version": "66.1.4",
+  "version": "66.3.3",
   "private": true,
   "description": "UnoCSS for VS Code",
   "license": "MIT",
   "homepage": "https://unocss.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/unocss/unocss",
+    "url": "git+https://github.com/unocss/unocss.git",
     "directory": "packages-integrations/vscode"
   },
   "categories": [
@@ -86,11 +86,13 @@
         "unocss.underline": {
           "type": "boolean",
           "default": true,
+          "scope": "language-overridable",
           "description": "Enable/disable underline decoration for class names"
         },
         "unocss.colorPreview": {
           "type": "boolean",
           "default": true,
+          "scope": "language-overridable",
           "description": "Enable/disable color preview decorations"
         },
         "unocss.colorPreviewRadius": {
@@ -101,11 +103,13 @@
         "unocss.remToPxPreview": {
           "type": "boolean",
           "default": true,
+          "scope": "language-overridable",
           "description": "Enable/disable rem to px preview in hover"
         },
         "unocss.remToPxRatio": {
           "type": "number",
           "default": 16,
+          "scope": "language-overridable",
           "description": "Ratio of rem to px"
         },
         "unocss.selectionStyle": {
@@ -152,12 +156,12 @@
     "@types/vscode": "^1.71.0",
     "@unocss/nuxt": "workspace:*",
     "@unocss/preset-uno": "workspace:*",
-    "esno": "catalog:",
-    "find-up": "catalog:",
-    "jiti": "catalog:",
-    "prettier": "catalog:",
-    "tsup": "catalog:",
-    "unconfig": "catalog:",
-    "vscode-ext-gen": "^1.0.2"
+    "esno": "catalog:utils",
+    "find-up": "catalog:utils",
+    "jiti": "catalog:utils",
+    "prettier": "catalog:utils",
+    "tsup": "catalog:typescript",
+    "unconfig": "catalog:utils",
+    "vscode-ext-gen": "^1.1.0"
   }
 }

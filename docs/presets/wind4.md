@@ -124,7 +124,7 @@ In PresetWind4, we align the reset styles with tailwind4 and integrate them inte
 
 ```ts [main.ts]
 import '@unocss/reset/tailwind.css' // [!code --]
-import '@unocss/reset/tailwind-compact.css' // [!code --]
+import '@unocss/reset/tailwind-compat.css' // [!code --]
 ```
 
 You only need to control whether to enable reset styles through a switch:
@@ -136,9 +136,9 @@ import { defineConfig } from 'unocss'
 export default defineConfig({
   presets: [
     presetWind4({
-      preflights: { // [!code focus]
-        reset: true, // [!code focus]
-      } // [!code focus]
+      preflights: { // [!code ++]
+        reset: true, // [!code ++]
+      } // [!code ++]
     }),
   ],
 })
@@ -162,9 +162,9 @@ import { defineConfig, presetWind4 } from 'unocss'
 export default defineConfig({
   presets: [
     presetWind4({
-      preflights: { // [!code focus]
-        theme: true, // [!code focus]
-      }, // [!code focus]
+      preflights: { // [!code ++]
+        theme: true, // [!code ++]
+      }, // [!code ++]
     }),
   ],
 })
@@ -175,18 +175,18 @@ export default defineConfig({
 And you can further control the output of your theme variables. For example, if you want to convert `rem` to `px` for theme variables, we provide the `createRemToPxProcessor` function to process your theme variables.
 
 ```ts twoslash [uno.config.ts]
-import { createRemToPxProcessor } from '@unocss/preset-wind4/utils' // [!code focus]
+import { createRemToPxProcessor } from '@unocss/preset-wind4/utils' // [!code ++]
 import { defineConfig, presetWind4 } from 'unocss'
 
 export default defineConfig({
   presets: [
     presetWind4({
-      preflights: { // [!code focus]
-        theme: { // [!code focus]
-          mode: 'on-demand', // Default by 'on-demand' // [!code focus]
-          process: createRemToPxProcessor(), // [!code focus]
-        } // [!code focus]
-      }, // [!code focus]
+      preflights: { // [!code ++]
+        theme: { // [!code ++]
+          mode: 'on-demand', // Default by 'on-demand' // [!code ++]
+          process: createRemToPxProcessor(), // [!code ++]
+        } // [!code ++]
+      }, // [!code ++]
     }),
   ],
 })
@@ -195,20 +195,20 @@ export default defineConfig({
 By the way, if you want to use the `presetRemToPx` preset to convert `rem` to `px`, you no longer need to import this preset separately as `presetWind4` provides this functionality internally.
 
 ```ts twoslash [uno.config.ts]
-import { createRemToPxProcessor } from '@unocss/preset-wind4/utils' // [!code focus]
+import { createRemToPxProcessor } from '@unocss/preset-wind4/utils' // [!code ++]
 import { defineConfig, presetWind4 } from 'unocss'
 
 export default defineConfig({
   presets: [
     presetWind4({
-      preflights: { // [!code focus]
-        theme: { // [!code focus]
-          process: createRemToPxProcessor(), // [!code focus]
-        } // [!code focus]
-      }, // [!code focus]
+      preflights: { // [!code ++]
+        theme: { // [!code ++]
+          process: createRemToPxProcessor(), // [!code ++]
+        } // [!code ++]
+      }, // [!code ++]
     }),
   ],
-  postprocess: [createRemToPxProcessor()], // [!code focus]
+  postprocess: [createRemToPxProcessor()], // [!code ++]
 })
 ```
 
@@ -270,36 +270,8 @@ You can also customize the output you want in the [Preflights Theme Process](#pr
 
 Refer to the [`process`](#process) option in Options.
 
-### presetWebFonts
-
-When using `presetWebFonts` with `PresetWind4`, the `fontFamily` theme key is no longer supported.
-Please make the following adjustment:
-
-```ts twoslash [uno.config.ts]
-import { defineConfig, presetWebFonts, presetWind4 } from 'unocss'
-
-export default defineConfig({
-  presets: [
-    presetWind4(),
-    presetWebFonts({
-      themeKey: 'font', // [!code ++]
-      // ^?
-    }),
-  ],
-})
-```
-
 ### presetLegacyCompat
 
 In `presetWind4`, we use the `oklch` color model to support better color contrast and color perception. Therefore, it is not compatible with `presetLegacyCompat` and is **not recommended** for use together.
 
 Please refer to the [Compatibility](#compatibility) section for more information.
-
-### transformDirectives
-
-`transformDirectives` doesn't work well with `PresetWind4`. There are some known issues, so please use it with caution.
-
-::: warning
-
-- When using `@apply` to process rules that have `@property`, conflicts may occur between different layer levels.
-  :::

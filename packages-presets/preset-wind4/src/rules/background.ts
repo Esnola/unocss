@@ -119,7 +119,7 @@ export const backgroundStyles: Rule<Theme>[] = [
     let v
 
     if (h.number(d) != null) {
-      v = `${h.number(d)}deg ${resolveModifier(s)};`
+      v = `from ${h.number(d)}deg ${resolveModifier(s)};`
     }
     else {
       v = h.bracket(d)
@@ -159,6 +159,7 @@ export const backgroundStyles: Rule<Theme>[] = [
   ['bg-auto', { 'background-size': 'auto' }],
   ['bg-cover', { 'background-size': 'cover' }],
   ['bg-contain', { 'background-size': 'contain' }],
+  [/^bg-size-(.+)$/, ([, v]) => ({ 'background-size': h.bracket.cssvar(v) })],
 
   // attachments
   ['bg-fixed', { 'background-attachment': 'fixed' }],

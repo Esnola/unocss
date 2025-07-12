@@ -2,7 +2,7 @@ import type { CSSObject, CSSValueInput, Rule, RuleContext } from '@unocss/core'
 import type { Theme } from '../theme'
 import { colorableShadows, colorResolver, defineProperty, getStringComponent, globalKeywords, h, isCSSMathFn, numberResolver } from '../utils'
 import { bracketTypeRe } from '../utils/handlers/regex'
-import { generateThemeVariable, themeTracking } from '../utils/theme-track'
+import { generateThemeVariable, themeTracking } from '../utils/track'
 
 export const fonts: Rule<Theme>[] = [
   // text
@@ -280,7 +280,7 @@ const fontVariantNumericProperties = [
   defineProperty('--un-numeric-fraction'),
 ]
 const baseFontVariantNumeric = {
-  'font-variant-numeric': 'var(--un-ordinal) var(--un-slashed-zero) var(--un-numeric-figure) var(--un-numeric-spacing) var(--un-numeric-fraction)',
+  'font-variant-numeric': 'var(--un-ordinal,) var(--un-slashed-zero,) var(--un-numeric-figure,) var(--un-numeric-spacing,) var(--un-numeric-fraction,)',
 }
 
 export const fontVariantNumeric: Rule<Theme>[] = [

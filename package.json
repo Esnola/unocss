@@ -3,7 +3,7 @@
   "type": "module",
   "version": "66.6.8",
   "private": true,
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.1.2",
   "scripts": {
     "prepare": "tsx scripts/prepare.ts",
     "taze": "taze minor -wIr && pnpm -r --parallel run update-post",
@@ -107,6 +107,7 @@
     "unocss": "workspace:*",
     "unplugin-auto-import": "catalog:utils",
     "unplugin-vue-components": "catalog:vue",
+    "unrun": "catalog:utils",
     "vite": "catalog:vite",
     "vite-plugin-inspect": "catalog:vite",
     "vite-plugin-pages": "catalog:vite",

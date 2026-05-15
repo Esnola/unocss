@@ -64,5 +64,9 @@
     "prettier-plugin-svelte": "catalog:svelte",
     "svelte": "catalog:svelte",
     "vite": "catalog:vite"
+  },
+  "inlinedDependencies": {
+    "picomatch": "4.0.3",
+    "unplugin-utils": "0.3.1"
   }
 }
